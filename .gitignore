@@ -1,0 +1,4 @@
+/config/*
+/web/node_modules
+/web/.env
+/deploy/*
