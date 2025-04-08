@@ -6,11 +6,11 @@ Firs steps(08.04.2025):
 
 Backend:
 -
-1. Create authorization with jwt
-2. Create a basic CRUD for user(role etc.)
-3. Create a basic CRUD for Project
-4. Create a basic CRUD for tasks
-5. Create a basic CRUD for subtasks(has relation with tasks)
+1. Create a basic CRUD for user(role etc.)
+2. Create authorization with jwt
+3. Create a basic CRUD for Project(sl)
+4. Create a basic CRUD for tasks (sl)
+5. Create a basic CRUD for subtasks(has relation with tasks) (sl)
 
 Frontend:
 -
