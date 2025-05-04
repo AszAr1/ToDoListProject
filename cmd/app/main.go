@@ -1,30 +1,36 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"net/http"
+	"taskManager/internal/app"
 	"taskManager/internal/infrastruct/config"
 	"taskManager/pkg"
 )
 
 func main() {
 	cfg := config.MustLoadAppConfig()
-	db := pkg.MustNewDbInstance(cfg.Database.Url)
-	defer db.Instance.Close()
+	db := pkg.MustConnectDatabase(cfg.Database.Url)
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			panic(fmt.Sprintf("Error closing database connection: %v", err))
+		}
+	}(db)
 
-	app := fiber.New(fiber.Config{
-		ReadTimeout:  cfg.Timeout,
-		IdleTimeout:  cfg.IdleTimeout,
-		WriteTimeout: cfg.Timeout,
+	server := fiber.New(fiber.Config{
+		ReadTimeout:       cfg.Timeout,
+		IdleTimeout:       cfg.IdleTimeout,
+		WriteTimeout:      cfg.Timeout,
+		EnablePrintRoutes: true,
 	})
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(http.StatusOK).JSON(fiber.Map{
-			"message": "Hello World",
-		})
-	})
+	api := server.Group("/api")
 
-	err := app.Listen(cfg.HttpServer.Address)
+	app.NewApp(db, api).Build()
+
+	err := server.Listen(cfg.HttpServer.Address)
 	if err != nil {
 		panic("Failed to start server: " + err.Error())
 	}

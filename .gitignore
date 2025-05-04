@@ -1,4 +1,4 @@
-/config/*
+/config/cfg.yaml
 /web/node_modules
 /web/.env
 /deploy/*

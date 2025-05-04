@@ -5,18 +5,15 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Db struct {
-	Instance *sql.DB
-}
+func MustConnectDatabase(url string) *sql.DB {
 
-func MustNewDbInstance(url string) *Db {
+	const op = "pkg.database.driver"
+
 	db, err := sql.Open("mysql", url)
 
 	if err != nil {
-		panic("Failed to connect to database: " + err.Error())
+		panic("Can not connect to database: " + err.Error())
 	}
 
-	return &Db{
-		db,
-	}
+	return db
 }
